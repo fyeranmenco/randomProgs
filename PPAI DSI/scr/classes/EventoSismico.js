@@ -19,7 +19,8 @@ export class EventoSismico {
       alcanceSismo,
       estadoActual,
       cambiosEstado,
-      seriesTemporales
+      seriesTemporales,
+	  analistaSupervisor
     ) {
       if (!(clasificacion instanceof ClasificacionSismo)) {
         throw new Error('"clasificacion" debe ser una instancia de ClasificacionSismo');
@@ -63,7 +64,7 @@ export class EventoSismico {
       this.estadoActual = estadoActual;
       this.cambiosEstado = cambiosEstado;
       this.seriesTemporales = seriesTemporales;
-
+	  this.analistaSupervisor = analistaSupervisor
 
       
     }
@@ -138,12 +139,12 @@ export class EventoSismico {
 	}
 
 
-	cambiarEstadoRechazado(fechahoraActual,estadoRechazado){
-	const cambioActual = this.getCambioEstadoActual()
-	cambioActual.setFechaYHoraFin(fechahoraActual)
-	const cambioNew = new CambioEstado(fechahoraActual, null, estadoRechazado);
-	this.cambiosEstado.push(cambioNew)
+	cambiarEstadoRechazado(fechahoraActual, estadoRechazado, analista){
+	this.getCambioEstadoActual().setFechaYHoraFin(fechahoraActual)
+	const rechazado = new CambioEstado(fechahoraActual, null, estadoRechazado);
+	this.cambiosEstado.push(rechazado)
 	this.setEstadoActual(estadoRechazado)
+	this.setAnalistaSupervisor(analista)
 	}
 
 
@@ -184,6 +185,9 @@ export class EventoSismico {
 	}
 	getValorMagnitud(){
 	return this.valorMagnitud
+	}
+	setAnalistaSupervisor(analista) {
+		this.analistaSupervisor = analista
 	}
 
 }

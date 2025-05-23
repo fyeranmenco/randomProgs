@@ -5,6 +5,6 @@ export class Sesion{
     }
 
     getAnalistaSismico(){
-		this.usuario.getASLogueado()
+		return this.usuario.getASLogueado()
     }
   }

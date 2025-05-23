@@ -11,15 +11,26 @@ export class GestorDeSismos {
 		this.boundary = boundary
 	}
 
+	tomarEventosNoRevisados() {
+		this.buscarEventosNoRevisados()
+	}
+
     buscarEventosNoRevisados() {
-		let eventosNoRevisados = []
+		let datosEventosNoRevisados = []
+		let punterosEventos = []
 		this.eventosSismicos.forEach(e => {
-			if (!e.estaPendienteRevision()) {}
-			else {
-				eventosNoRevisados.push(e)
+			if (e.estaPendienteRevision()) {
+				const fechaHoraOcurrencia = e.getFechaHoraOcurrencia()
+				const latitudHipocentro = e.getLatitudHipocentro()
+				const longitudHipocentro = e.getLongitudHipocentro()
+				const latitudEpicentro = e.getLatitudEpicentro()
+				const longitudEpicentro = e.getLongitudEpicentro()
+				const valorMagnitud = e.getValorMagnitud()
+				datosEventosNoRevisados.push({fechaHoraOcurrencia, latitudHipocentro, longitudHipocentro, latitudEpicentro, longitudEpicentro, valorMagnitud})
+				punterosEventos.push(e)
 			}
 		})
-		this.boundary.mostrarEventosNoRevisados(eventosNoRevisados)
+		this.boundary.mostrarEventosNoRevisados(punterosEventos, datosEventosNoRevisados)
     }
 
 	seleccionarEventoSismico(evento, esVuelta = false) {
@@ -68,20 +79,22 @@ export class GestorDeSismos {
 
 	cambiarEstadoRechazado(evento) {
 		this.obtenerFechaYHora()
-		evento.cambiarEstadoRechazado(this.fechaHoraActual, this.estadoRechazado)
+		const analista = this.sesion.getAnalistaSismico()
+		evento.cambiarEstadoRechazado(this.fechaHoraActual, this.estadoRechazado, analista)
 		console.log(evento)
+		this.FinCU()
 	}
 
 	seleccionarModificarEvento(evento) {
 		const alcanceSismo = evento.getAlcance()
 		const origenGeneracion = evento.getOrigenGeneracion()
 		const valorMagnitud = evento.getValorMagnitud()
-		this.boundary.habilitarModificacionDeDatosSismicos(evento, alcances, origenes, {alcanceSismo, origenGeneracion, valorMagnitud}) 
+		this.boundary.habilitarModificacionDeDatosSismicos(evento, this.alcances, this.origenes, {alcanceSismo, origenGeneracion, valorMagnitud}) 
 	}
 
 	modificarEvento(evento, alcance, origen, magnitud) {
-		const alcanceSeleccionado = alcances.find(a => a.nombre === alcance);
-		const origenSeleccionado = origenes.find(o => o.nombre === origen);
+		const alcanceSeleccionado = this.alcances.find(a => a.nombre === alcance);
+		const origenSeleccionado = this.origenes.find(o => o.nombre === origen);
 		evento.setMagnitud(magnitud) ;
 		evento.setAlcance(alcanceSeleccionado);
 		evento.setOrigen(origenSeleccionado);

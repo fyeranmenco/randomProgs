@@ -6,6 +6,6 @@ export class Usuario{
     }
 
     getASLogueado(){
-		this.empleado.getNombre()
+		return this.empleado.getNombre()
     }
   }

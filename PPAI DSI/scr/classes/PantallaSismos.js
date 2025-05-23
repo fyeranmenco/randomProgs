@@ -11,11 +11,11 @@ export class PantallaSismos {
 
     habilitarVentana() {
 		document.getElementById('btnRegistrarRevision').addEventListener('click', () => {
-			this.gestor.buscarEventosNoRevisados()
+			this.gestor.tomarEventosNoRevisados()
 		})
     }
 
-	mostrarEventosNoRevisados(eventosNoRevisados) {
+	mostrarEventosNoRevisados(punterosEventos, datosEventosNoRevisados) {
 		const listaEventosDiv = document.getElementById("listaEventos");
 		const detalleEventoCard = document.getElementById("detalleEvento");
 		const detalleEventoContenido = document.getElementById("detalleEventoContenido");
@@ -24,13 +24,14 @@ export class PantallaSismos {
 		listaEventosDiv.style.display = 'block';  // Mostrar lista 
 		btnRegistrarRevision.style.display = 'none'; // <<< Oculta el botón al mostrar eventos
 	
-		if (eventosNoRevisados.length === 0) {
+		if (datosEventosNoRevisados.length === 0) {
 		listaEventosDiv.innerHTML = `<div class="alert alert-info">No hay eventos sísmicos sin revisar.</div>`;
 		detalleEventoCard.classList.add("d-none");
 		return
 		}
 		
-		const eventosOrdenados = this.ordenarEventos(eventosNoRevisados)
+		const eventosOrdenados = this.ordenarEventos(datosEventosNoRevisados)
+		const punterosEventosOrdenados = this.ordenarEventos(punterosEventos)
 
 		let html = `
 		<table class="table table-hover table-striped">
@@ -50,9 +51,9 @@ export class PantallaSismos {
 		html += `
 			<tr>
 			<td>${evento.fechaHoraOcurrencia}</td>
-			<td>${evento.getLatitudEpicentro().toFixed(2)}, ${evento.getLongitudEpicentro().toFixed(2)}</td>
-			<td>${evento.getLatitudHipocentro().toFixed(2)}, ${evento.getLongitudHipocentro().toFixed(2)}</td>
-			<td>${evento.getValorMagnitud().toFixed(1)}</td>
+			<td>${evento.latitudEpicentro.toFixed(2)}, ${evento.longitudEpicentro.toFixed(2)}</td>
+			<td>${evento.latitudHipocentro.toFixed(2)}, ${evento.longitudHipocentro.toFixed(2)}</td>
+			<td>${evento.valorMagnitud.toFixed(1)}</td>
 			<td><button class="btn btn-sm btn-primary btn-seleccionar" data-index="${index}">Seleccionar</button></td>
 			</tr>
 		`;
@@ -72,7 +73,7 @@ export class PantallaSismos {
 		botones.forEach(boton => {
 		boton.addEventListener("click", () => {
 			const id = parseInt(boton.getAttribute("data-index"));
-			const evento = eventosOrdenados[id];
+			const evento = punterosEventosOrdenados[id];
 			if (evento) {
 			this.seleccionarEventoSismico(evento)
 			}
@@ -82,10 +83,10 @@ export class PantallaSismos {
 
 	ordenarEventos(eventos) {
 		return eventos.sort((a, b) => {
-			if (a.getFechaHoraOcurrencia() > b.getFechaHoraOcurrencia()) {
+			if (a.fechaHoraOcurrencia > b.fechaHoraOcurrencia) {
 				return 1;
 			}
-			if (a.getFechaHoraOcurrencia() < b.getFechaHoraOcurrencia()) {
+			if (a.fechaHoraOcurrencia < b.fechaHoraOcurrencia) {
 				return -1;
 			}
 			return 0;})
@@ -195,7 +196,7 @@ export class PantallaSismos {
 		break;
 		case "rechazar":
 		alert("Evento rechazado.");
-			this.gestor.rechazarEventoSismico(evento)
+			this.seleccionarRechazarEvento(evento)
 		break;
 		case "revision":
 		alert("Revisión solicitada.");
@@ -207,6 +208,10 @@ export class PantallaSismos {
 	this.gestor.buscarEventosNoRevisados()
 	};
 
+	}
+
+	seleccionarRechazarEvento(evento) {
+		this.gestor.rechazarEventoSismico(evento)
 	}
 
 	habilitarModificacionDeDatosSismicos(evento, alcances, origenes, datosEvento) {
@@ -251,7 +256,7 @@ export class PantallaSismos {
   
     // Cancelar vuelve a modo solo lectura sin guardar
     document.getElementById("btnCancelar").onclick = () => {
-      this.mostrarDatosEventoSismico(evento);
+		this.gestor.seleccionarEventoSismico(evento, true)
     };
   
     // Guardar cambios

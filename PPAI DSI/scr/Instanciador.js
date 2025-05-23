@@ -121,8 +121,8 @@ const serie1 = new SerieTemporal("Normal", "2025-05-20 14:30:00", "2025-05-20 14
 const serie2 = new SerieTemporal("Alarma leve", "2025-05-20 14:31:00", "2025-05-20 14:31:10", 1.0, muestras2, sismografo2);
 const serie3 = new SerieTemporal("Alarma moderada", "2025-05-20 14:32:00", "2025-05-20 14:32:10", 1.0, muestras3, sismografo3);
 
-const evento1 = new EventoSismico("2025-05-21T12:30:00", "2025-05-21T12:00:00", -31.4201, -64.1888, -31.4301, -64.1988, 5.7, clasificacionLeve, origenTectonico, alcanceLocal, estadoPendienteRevision, [cambio1], [serie1]);
-const evento2 = new EventoSismico("2025-05-20T08:45:00", "2025-05-20T08:15:00", -32.8908, -68.8440, -32.9000, -68.8500, 4.9, clasificacionModerado, origenVolcanico, alcanceRegional, estadoPendienteRevision, [cambio2], [serie2,serie3]);
+const evento1 = new EventoSismico("2025-05-21T12:30:00", "2025-05-21T12:00:00", -31.4201, -64.1888, -31.4301, -64.1988, 5.7, clasificacionLeve, origenTectonico, alcanceLocal, estadoPendienteRevision, [cambio1], [serie1], null);
+const evento2 = new EventoSismico("2025-05-20T08:45:00", "2025-05-20T08:15:00", -32.8908, -68.8440, -32.9000, -68.8500, 4.9, clasificacionModerado, origenVolcanico, alcanceRegional, estadoPendienteRevision, [cambio2], [serie2,serie3], null);
 const eventosSismicos = [evento1, evento2]
 
 const empleado = new Empleado("Jose", "Fonseca", "jose@gmail.com", "3513653788")
