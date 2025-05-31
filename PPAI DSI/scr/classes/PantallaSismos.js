@@ -210,6 +210,10 @@ export class PantallaSismos {
 
 	}
 
+	habilitarMapaEventosSismicos() {
+		
+	}
+
 	seleccionarRechazarEvento(evento) {
 		this.gestor.rechazarEventoSismico(evento)
 	}

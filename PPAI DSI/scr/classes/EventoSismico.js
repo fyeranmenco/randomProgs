@@ -70,21 +70,11 @@ export class EventoSismico {
     }
 
 	estaAutoDetectado() {
-		this.cambiosEstado.forEach(c => {
-			if (c.esEstadoActual()) {
-				return c.getEstado().esAutoDetectado()
-			}
-		})
+		return this.estadoActual.estaAutoDetectado()
 	}
 
 	estaPendienteRevision() {
-		let bandera = false
-		this.cambiosEstado.forEach(c => {
-			if (c.esEstadoActual()) {
-				bandera = c.getEstado().estaPendienteRevision()
-			}
-		})
-		return bandera
+		return this.estadoActual.estaPendienteRevision()
 	}
 
 	getCambioEstadoActual(){

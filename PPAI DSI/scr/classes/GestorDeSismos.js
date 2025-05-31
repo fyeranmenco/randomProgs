@@ -1,13 +1,13 @@
 export class GestorDeSismos {
 	constructor(estados, sesion, eventosSismicos, alcances, origenes) {
-		this.estados = estados
+		this.estados = estados 
 		this.sesion = sesion
-		this.eventosSismicos = eventosSismicos
+		this.eventosSismicos = eventosSismicos 
 		this.alcances = alcances
 		this.origenes = origenes
 	}
 
-    	setBoundary(boundary) {
+    setBoundary(boundary) {
 		this.boundary = boundary
 	}
 
@@ -19,7 +19,7 @@ export class GestorDeSismos {
 		let datosEventosNoRevisados = []
 		let punterosEventos = []
 		this.eventosSismicos.forEach(e => {
-			if (e.estaPendienteRevision()) {
+			if (e.estaPendienteRevision() || e.estaAutoDetectado()) {
 				const fechaHoraOcurrencia = e.getFechaHoraOcurrencia()
 				const latitudHipocentro = e.getLatitudHipocentro()
 				const longitudHipocentro = e.getLongitudHipocentro()
@@ -61,6 +61,10 @@ export class GestorDeSismos {
 
 	obtenerSeriesTemporales(evento) {
 		return evento.getDatosSeriesTemporales()
+	}
+
+	llamarCUGenerarSismograma() {
+		this.boundary.habilitarMapaEventosSismicos()
 	}
 
 	rechazarEventoSismico(evento) {
